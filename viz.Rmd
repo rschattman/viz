@@ -1,0 +1,26 @@
+---
+title: "Viz_survey"
+author: "Rachel Schattman"
+date: "March 15, 2019"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# load libraries
+```{r, echo=FALSE}
+library(knitr)
+```
+
+
+# Read in data 
+```{r}
+vizDF <- read.csv(file = "C:/Users/rschattman/Documents/Research/Viz 2019/viz/RAWSurveyData_FarmerConferences_RS.csv", header = TRUE, sep = ",")
+```
+
+# Summarize responses 
+```{r}
+summary(vizDF$Q2.4)
+```
