@@ -43,3 +43,5 @@ plot1 <- barplot(VizMat, main="Limiting factors",
                  horiz = FALSE)
   
 ```
+
+######## End of Script ###########
