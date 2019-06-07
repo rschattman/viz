@@ -12,6 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 # load libraries
 ```{r, echo=FALSE}
 library(knitr)
+library(graphics)
+library(dplyr)
 ```
 
 
@@ -19,8 +21,25 @@ library(knitr)
 ```{r}
 vizDF <- read.csv(file = "C:/Users/rschattman/Documents/Research/Viz 2019/viz/RAWSurveyData_FarmerConferences_RS.csv", header = TRUE, sep = ",")
 ```
+# subset by respondent type
+```{r}
+vizFarmer <- subset(vizDF, c(vizDF$Q1 == 1), select = vizDF$Q1:vizDF$Q23)
 
+```
 # Summarize responses 
 ```{r}
-summary(vizDF$Q2.4)
+
+summary(vizDF$Q20.b)
+  
+
+```
+
+# graphs
+```{r}
+VizMat <- as.matrix(vizDF)
+plot1 <- barplot(VizMat, main="Limiting factors",
+                 xlab="BMP", col=c("darkblue","red"),
+                 beside = FALSE,
+                 horiz = FALSE)
+  
 ```
