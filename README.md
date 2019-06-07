@@ -2,6 +2,7 @@
 
 This file contains the Meta Data needed to interpret our data file ("RAWsurveyData_FarmerConferences_RS.csv") 
 DOI: 10.5281/zenodo.3241576
+https://zenodo.org/badge/175874729.svg
 
 Column 1: Conference
 This indicates which conference the survey was conducted at. Code association with particular conferences has been withheld to protect participant anonymity.
