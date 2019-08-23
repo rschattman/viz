@@ -202,7 +202,7 @@ Overall, do these photo\simulations help you to envision what agricultural adapt
 5 = Not sure
  
 Column 55: Q20
-Are you more likely to consider implementing/recommending these climate change best management practices after seeing these photo\simulations?
+Are you more likely to consider implementing/recommending these climate change best management practices after seeing these photo\simulations? (Note: Q20.b removes respondents who selected option 6)
 1 = No, not at all
 2 = Not likely
 3 = Maybe

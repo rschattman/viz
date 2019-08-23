@@ -14,6 +14,17 @@ knitr::opts_chunk$set(echo = TRUE)
 library(knitr)
 library(graphics)
 library(dplyr)
+
+#for SEM
+library(ltm)
+library(lavaan)
+library(readr)
+library(semPlot)
+library(nlme)
+library(gridExtra)
+library(lme4)
+library(readr)
+library(piecewiseSEM)
 ```
 
 
@@ -44,4 +55,95 @@ plot1 <- barplot(VizMat, main="Limiting factors",
   
 ```
 
+# SEM - latent variable exploration
+``` {r}
+
+# explore limitations as potential latent variables
+
+### Subset for Riparian Buffers, Drainage Tile, Constructed Wetland, and Silvopasture variables ##
+colnames(vizDF) # view column names
+
+
+RipLimit <- subset(vizDF[,20:27]) # subset Riparian buffer limitations question
+RipLimit <- na.omit(RipLimit) # remove NAs
+str(RipLimit) # check DF structure
+
+DrainLimit <- subset(vizDF[,33:39]) # subset Drainage tiles limitations question
+DrainLimit <- na.omit(DrainLimit) # remove NAs
+str(DrainLimit) # check DF structure
+
+WetlandLimit <- subset(vizDF[,45:51]) # subset Constructed Wetland limitations question
+WetlandLimit <- na.omit(WetlandLimit) # remove NAs
+str(WetlandLimit) # check DF structure
+
+SilvoLimit <- subset(vizDF[,57:63]) # subset Silvopasture limitations question
+SilvoLimit <- na.omit(SilvoLimit) # remove NAs
+str(SilvoLimit) # check DF structure
+
+######### Chronbach's alpha on limitations variables #####
+
+cronbach.alpha(RipLimit, CI = TRUE, B = 500, na.rm=TRUE) #Nope
+cronbach.alpha(DrainLimit, CI = TRUE, B = 500, na.rm=TRUE) #Nope
+cronbach.alpha(WetlandLimit, CI = TRUE, B = 500, na.rm=TRUE) #this one could be treated as latent
+cronbach.alpha(SilvoLimit, CI = TRUE, B = 500, na.rm=TRUE) #this one could be treated as latent
+
+```
+
+#Piecewise SEM - model construction
+```{r}
+#t-rule: t  ≤ p(p+1)/2 
+p=3
+p*(p+1)/2 # 6 parameters will saturate
+
+
+Rip1 <- subset(vizDF[,c(68,16,33)]) # create DF subset
+Rip1 <- na.omit(Rip1)
+str(Rip1)
+
+psem_rip1 = psem(
+  
+  lm(Q20 ~ Q4 + Q12.1, data = Rip1),
+  lm(Q12.1 ~ Q4, data = Rip1)
+)
+
+summary(psem_rip1)
+
+
+Rip2 <- subset(vizDF[,c(68,16,34)]) # create DF subset
+Rip2 <- na.omit(Rip2)
+str(Rip2)
+
+psem_rip2 = psem(
+  
+  lm(Q20 ~ Q4 + Q12.2, data = Rip2),
+  lm(Q12.2 ~ Q4, data = Rip2)
+)
+
+summary(psem_rip2)
+
+```
+# Junk code
+```{r}
+sem.mod1 <- lavaan::sem('Q20 ~ Q4 + Q12.1', data = vizDF) #Riparian buffers limitation 1
+sem.mod1 <- ' #start of model
+
+# manifest variable variances (uniquenesses)
+#Q20 ~~ Q20
+#Q4 ~~ Q4
+#Q12.1 ~~ Q12.1
+
+#manifest variable means 
+#Q20 ~ 1 
+#Q4 ~ 1
+#Q12.1 ~ 0 #Forced to zero to avoid duplicate model element
+
+Q20 ~ Q4 + Q12.1 
+
+' #end of model
+
+sem.mod1 <- lavaan(sem.mod1, data=vizDF, mimic = "mplus")
+summary(sem.mod1, standardized=TRUE, fit.measures=TRUE)
+
+                  
+```
 ######## End of Script ###########
